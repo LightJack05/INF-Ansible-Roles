@@ -13,6 +13,7 @@
     group: "{{ item.group | default(omit) }}"
     mode: "{{ item.mode | default('0755') }}"
   loop: "{{ volume_dirs | default([]) }}"
+  when: volume_dirs is defined and volume_dirs | length > 0
 
 - name: Copy docker-compose file to deployment directory
   copy:
