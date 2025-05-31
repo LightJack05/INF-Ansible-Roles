@@ -1,0 +1,34 @@
+---
+- name: Install RSnapshot
+  apt:
+    name: rsnapshot
+    state: latest
+    update_cache: yes
+
+- name: Copy RSnapshot file to etc directory
+  copy:
+    src: "{{ rsnapshot_conf }}"
+    dest: "/etc/rsnapshot.conf"
+    mode: '0644'
+
+- name: Create hourly job
+  cron:
+    minute: "0"
+    job: "rsnapshot hourly"
+- name: Create daily job
+  cron:
+    minute: "15"
+    hour: "3"
+    job: "rsnapshot daily"
+- name: Create weekly job
+  cron:
+    minute: "30"
+    hour: "3"
+    weekday: "1"
+    job: "rsnapshot daily"
+- name: Create monthly job
+  cron:
+    minute: "45"
+    hour: "3"
+    day: "1"
+    job: "rsnapshot daily"
