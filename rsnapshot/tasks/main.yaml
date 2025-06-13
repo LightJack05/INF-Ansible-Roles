@@ -28,11 +28,11 @@
     minute: "30"
     hour: "3"
     weekday: "1"
-    job: "rsnapshot daily 2>&1 | logger"
+    job: "rsnapshot weekly 2>&1 | logger"
 - name: Create monthly job
   cron:
     name: "Monthly rsnapshot"
     minute: "45"
     hour: "3"
     day: "1"
-    job: "rsnapshot daily 2>&1 | logger"
+    job: "rsnapshot monthly 2>&1 | logger"
