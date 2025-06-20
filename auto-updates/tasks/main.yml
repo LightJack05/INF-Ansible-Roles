@@ -1,0 +1,16 @@
+- name: Set up auto-update cron job
+  cron:
+    name: "auto-update"
+    user: root
+    minute: "{{ auto_updates_minute }}"
+    hour: "{{ auto_updates_hour }}"
+    day: "{{ auto_updates_day }}"
+    job: >
+      logger 'Auto-update started' &&
+      apt update &&
+      apt upgrade -y &&
+      logger 'Auto-update finished'
+      {% if auto_updates_reboot %}
+      && [ -f /var/run/reboot-required ] && logger 'Reboot required, rebooting...' && reboot
+      {% endif %}
+  when: auto_updates_enabled

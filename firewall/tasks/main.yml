@@ -1,0 +1,24 @@
+- name: Ensure UFW is installed
+  apt:
+    name: ufw
+    state: present
+    update_cache: true
+
+- name: Enable and start UFW
+  systemd:
+    name: ufw
+    enabled: true
+    state: started
+  when: firewall_enabled
+
+- name: Allow specified ports in UFW
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+  loop: "{{ firewall_allowed_ports }}"
+  when: firewall_enabled
+
+- name: Enable UFW with force
+  command: ufw --force enable
+  when: firewall_enabled
+

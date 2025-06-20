@@ -1,0 +1,5 @@
+auto_updates_enabled: true
+auto_updates_hour: 3
+auto_updates_minute: 10
+auto_updates_day: 1
+auto_updates_reboot: false  # Only reboot if true AND a reboot is required
