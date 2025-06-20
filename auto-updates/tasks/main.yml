@@ -14,3 +14,11 @@
       && [ -f /var/run/reboot-required ] && logger 'Reboot required, rebooting...' && reboot
       {% endif %}
   when: auto_updates_enabled
+
+- name: Remove auto-update cron job if disabled
+  cron:
+    name: "auto-update"
+    user: root
+    state: absent
+  when: not auto_updates_enabled
+
