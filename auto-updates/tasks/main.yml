@@ -6,10 +6,7 @@
     hour: "{{ auto_updates_hour }}"
     day: "{{ auto_updates_day }}"
     job: >
-      logger 'Auto-update started' &&
-      apt update &&
-      apt upgrade -y &&
-      logger 'Auto-update finished'
+      logger 'Auto-update started' && apt update  2>&1 | logger -t auto-update && apt upgrade -y 2>&1 | logger -t auto-update && logger 'Auto-update finished'
       {% if auto_updates_reboot %}
       && [ -f /var/run/reboot-required ] && logger 'Reboot required, rebooting...' && reboot
       {% endif %}
