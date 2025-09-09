@@ -1,0 +1,17 @@
+---
+- name: Backup existing netplan configuration
+  copy:
+    src: "{{ netplan_config_file }}"
+    dest: "{{ netplan_config_file }}.bak"
+    remote_src: yes
+  when: ansible_facts['os_family'] == "Debian"
+  ignore_errors: yes  # in case file doesn’t exist
+
+- name: Deploy netplan configuration
+  copy:
+    dest: "{{ netplan_config_file }}"
+    content: "{{ netplan_config }}"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Apply netplan

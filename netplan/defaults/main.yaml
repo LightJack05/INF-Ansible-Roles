@@ -1,0 +1,5 @@
+---
+netplan_config_file: "/etc/netplan/01-netcfg.yaml"
+
+# Example default bridge config (can be overridden in playbook/host_vars)
+netplan_config: ""
