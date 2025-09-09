@@ -6,7 +6,7 @@ netplan_config: ""
 
 # List of cloud-init-generated Netplan files to remove
 # Can be empty if you don't want to remove anything
-netplan_remove_cloudinit_files: []
+netplan_remove_files: []
 
 # Shortcut: remove default cloud-init config if true
 netplan_remove_cloudinit_config: false

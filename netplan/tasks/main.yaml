@@ -3,7 +3,7 @@
   set_fact:
     netplan_remove_list: >-
       {{
-        netplan_remove_cloudinit_files +
+        netplan_remove_files +
         (['/etc/netplan/50-cloud-init.yaml'] if netplan_remove_cloudinit_config else [])
       }}
 
