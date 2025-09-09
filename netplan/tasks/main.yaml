@@ -9,7 +9,7 @@
   file:
     path: "{{ item }}"
     state: absent
-  loop: "{{ netplan_remove_list }}"
+  loop: "{{ netplan_remove_files }}"
   when: netplan_remove_files | length > 0
 
 - name: Backup existing netplan configuration
