@@ -86,9 +86,10 @@
   when: not server_jar_stat.stat.exists
 
 - name: Deploy server configuration
-  copy:
+  template:
     dest: "{{ minecraft_server_dir }}/server.properties"
-    content: "{{ minecraft_server_config }}"
+    src: "{{ minecraft_server_config_path }}"
+    backup: true
     owner: root
     group: root
     mode: '0644'
