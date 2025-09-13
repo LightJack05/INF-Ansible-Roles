@@ -85,16 +85,6 @@
     group: root
   when: not server_jar_stat.stat.exists
 
-- name: Deploy server configuration
-  template:
-    dest: "{{ minecraft_server_dir }}/server.properties"
-    src: "{{ minecraft_server_config_path }}"
-    backup: true
-    owner: root
-    group: root
-    mode: '0644'
-  notify: restart minecraft
-
 - name: Deploy systemd unit file
   become: true
   template:
