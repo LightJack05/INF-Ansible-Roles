@@ -39,8 +39,6 @@
 - name: Set Minecraft server URL from version
   set_fact:
     minecraft_server_url_resolved: "{{ version_json.json.downloads.server.url if minecraft_server_url == '' else minecraft_server_url }}"
-  vars:
-    minecraft_server_url: "{{ minecraft_server_url }}"
 
 - name: Check if server JAR already exists
   become: true
