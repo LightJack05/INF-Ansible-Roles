@@ -1,0 +1,9 @@
+---
+minecraft_version: "1.21"
+minecraft_server_url: ""
+minecraft_server_dir: "/srv/minecraft"
+minecraft_auto_start: true
+minecraft_memory_max: "4G"
+minecraft_memory_min: "1G"
+minecraft_session_name: "minecraft"
+java_package: "openjdk-21-jre-headless"

@@ -1,0 +1,3 @@
+#!/bin/bash
+cd {{ minecraft_server_dir }}
+exec java -Xms{{ minecraft_memory_min }} -Xmx{{ minecraft_memory_max }} -jar server.jar nogui

@@ -1,0 +1,116 @@
+---
+- name: Install required packages
+  become: true
+  apt:
+    name:
+      - "{{ java_package }}"
+      - screen
+    state: present
+    update_cache: true
+
+- name: Ensure server directory exists
+  become: true
+  file:
+    path: "{{ minecraft_server_dir }}"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Get Minecraft version manifest
+  uri:
+    url: https://launchermeta.mojang.com/mc/game/version_manifest.json
+    return_content: yes
+  register: version_manifest
+  when: minecraft_server_url == ""
+
+- name: Find version JSON URL
+  set_fact:
+    version_json_url: "{{ (version_manifest.json.versions | selectattr('id', 'equalto', minecraft_version) | map(attribute='url') | first) }}"
+  when: minecraft_server_url == ""
+
+- name: Get version JSON
+  uri:
+    url: "{{ version_json_url }}"
+    return_content: yes
+  register: version_json
+  when: minecraft_server_url == ""
+
+- name: Set Minecraft server URL from version
+  set_fact:
+    minecraft_server_url_resolved: "{{ version_json.json.downloads.server.url if minecraft_server_url == '' else minecraft_server_url }}"
+  vars:
+    minecraft_server_url: "{{ minecraft_server_url }}"
+
+- name: Check if server JAR already exists
+  become: true
+  stat:
+    path: "{{ minecraft_server_dir }}/server.jar"
+  register: server_jar_stat
+
+- name: Get checksum of existing server JAR
+  become: true
+  command: sha1sum {{ minecraft_server_dir }}/server.jar
+  register: existing_jar_checksum
+  when: server_jar_stat.stat.exists
+  changed_when: false
+
+- name: Download Minecraft server JAR
+  become: true
+  get_url:
+    url: "{{ minecraft_server_url_resolved }}"
+    dest: "{{ minecraft_server_dir }}/server.jar"
+    mode: '0644'
+    owner: root
+    group: root
+    checksum: "sha1:{{ version_json.json.downloads.server.sha1 if minecraft_server_url == '' else omit }}"
+  when: not server_jar_stat.stat.exists or (minecraft_server_url == '' and existing_jar_checksum.stdout.split()[0] != version_json.json.downloads.server.sha1) or (minecraft_server_url != '' and existing_jar_checksum.stdout.split()[0] != (lookup('url', minecraft_server_url, wantlist=True) | hash('sha1')))
+  notify: restart minecraft
+
+- name: Create run.sh script
+  become: true
+  template:
+    src: run.sh.j2
+    dest: "{{ minecraft_server_dir }}/run.sh"
+    mode: '0755'
+    owner: root
+    group: root
+  notify: restart minecraft
+
+- name: Accept EULA
+  become: true
+  copy:
+    content: "eula=true"
+    dest: "{{ minecraft_server_dir }}/eula.txt"
+    mode: '0644'
+    owner: root
+    group: root
+  when: not server_jar_stat.stat.exists
+
+- name: Deploy systemd unit file
+  become: true
+  template:
+    src: minecraft.service.j2
+    dest: /etc/systemd/system/minecraft.service
+    mode: '0644'
+  notify: reload systemd
+
+- name: Reload systemd daemon
+  become: true
+  systemd:
+    daemon_reload: true
+  when: minecraft_auto_start
+
+- name: Enable Minecraft service
+  become: true
+  systemd:
+    name: minecraft
+    enabled: true
+  when: minecraft_auto_start
+
+- name: Start Minecraft service
+  become: true
+  systemd:
+    name: minecraft
+    state: started
+  when: minecraft_auto_start and not server_jar_stat.stat.exists

@@ -1,0 +1,18 @@
+[Unit]
+Description=Minecraft Server
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+WorkingDirectory={{ minecraft_server_dir }}
+
+# You can customize the maximum amount of memory as well as the JVM flags here
+ExecStart=screen -DmS {{ minecraft_session_name }} {{ minecraft_server_dir }}/run.sh
+
+# Restart the server when it is stopped or crashed after 30 seconds
+# Comment out RestartSec if you want to restart immediately
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
