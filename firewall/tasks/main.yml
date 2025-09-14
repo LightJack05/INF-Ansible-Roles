@@ -17,8 +17,6 @@
     port: "{{ item }}"
   loop: "{{ firewall_allowed_ports }}"
   when: firewall_enabled
+  notify: ufw enable
 
-- name: Enable UFW with force
-  command: ufw --force enable
-  when: firewall_enabled
 

@@ -1,0 +1,5 @@
+- name: compose up
+  command: docker compose up -d
+  args:
+    chdir: "/srv/{{ deployment_name }}"
+

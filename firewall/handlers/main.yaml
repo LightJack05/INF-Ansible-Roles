@@ -1,0 +1,4 @@
+
+- name: ufw enable
+  command: ufw --force enable
+  when: firewall_enabled
