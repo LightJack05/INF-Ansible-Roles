@@ -13,7 +13,7 @@ upstream {{ item.config_name }} {
 {% if port.listen_tcp %}
 
 server {
-    listen {{ port.listen_ip+':' if port.listen_ip is not none else '' }}{{ port.port }};
+    listen {{ port.listen_ip+':' if 'listen_ip' in port and port.listen_ip is not none else '' }}{{ port.port }};
     proxy_pass {{ item.config_name }};
 }
 
@@ -22,7 +22,7 @@ server {
 {% if port.listen_udp %}
 
 server {
-    listen {{ port.listen_ip+':' if port.listen_ip is not none else '' }}{{ port.port }} udp;
+    listen {{ port.listen_ip+':' if 'listen_ip' in port and port.listen_ip is not none else '' }}{{ port.port }} udp;
     proxy_pass {{ item.config_name }};
 }
 
