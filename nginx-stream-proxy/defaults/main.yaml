@@ -1,0 +1,20 @@
+nginx_stream_proxy_main_config_file: nginx.conf.j2
+nginx_stream_proxy_server_template_file: stream_proxy_entry.conf.j2
+nginx_stream_proxy_compose_src: docker-compose.yml.j2
+nginx_stream_proxy_container_image: "nginx:alpine"
+nginx_stream_proxy_deployment_name: "nginx-stream-proxy"
+nginx_stream_proxy_container_ip: ""
+nginx_stream_proxy_container_macvlan_network: "" 
+nginx_stream_proxy_configs: []
+
+
+# nginx_stream_proxy_configs: 
+#   - config_name: "http_server"
+#     listen_ports:
+#       - port: 80
+#         listen_tcp: true
+#         listen_udp: true
+#         listen_ip: ""
+#     upstream_ips:
+#       - ip: 10.0.0.10
+#         port: 80

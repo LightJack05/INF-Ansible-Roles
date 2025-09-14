@@ -2,4 +2,4 @@
 deployment_name: my_app
 compose_src: ""
 volume_dirs: []
-
+docker_compose_immediate_up: true

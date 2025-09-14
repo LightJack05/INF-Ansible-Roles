@@ -1,0 +1,31 @@
+upstream {{ item.config_name }} {
+
+{% for upstream_host in item.upstream_ips %}
+
+    server {{ upstream_host.ip }}:{{ upstream_host.port }};
+
+{% endfor %}
+
+}
+
+{% for port in item.listen_ports %}
+
+{% if port.listen_tcp %}
+
+server {
+    listen {{ port.listen_ip+':' if port.listen_ip is not none else '' }}{{ port.port }};
+    proxy_pass {{ item.config_name }};
+}
+
+{% endif %}
+
+{% if port.listen_udp %}
+
+server {
+    listen {{ port.listen_ip+':' if port.listen_ip is not none else '' }}{{ port.port }} udp;
+    proxy_pass {{ item.config_name }};
+}
+
+{% endif %}
+
+{% endfor %}

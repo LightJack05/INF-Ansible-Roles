@@ -1,0 +1,28 @@
+- name: Set up default nginx docker compose
+  ansible.builtin.include_role:
+    name: docker-compose
+  vars:
+    compose_src: "{{ nginx_stream_proxy_compose_src }}"
+    deployment_name: "{{ nginx_stream_proxy_deployment_name }}"
+    docker_compose_immediate_up: false
+    volume_dirs: 
+      - path: "/srv/{{ nginx_stream_proxy_deployment_name }}/conf"
+        owner: root
+        group: root
+        mode: 755
+      - path: "/srv/{{ nginx_stream_proxy_deployment_name }}/conf/conf.d"
+        owner: root
+        group: root
+        mode: 755
+
+- name: Deploy nginx root config
+  template:
+    src: "{{ nginx_stream_proxy_main_config_file }}"
+    dest: "/srv/{{ nginx_stream_proxy_deployment_name }}/conf/nginx.conf"
+
+- name: Deploy nginx proxy configs
+  template:
+    src: "{{ nginx_stream_proxy_server_template_file }}"
+    dest: "/srv/{{ nginx_stream_proxy_deployment_name }}/conf/conf.d/{{ item.config_name }}.conf"
+  loop: "{{ nginx_stream_proxy_configs }}"
+  notify: compose restart

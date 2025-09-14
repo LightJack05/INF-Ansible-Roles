@@ -20,9 +20,12 @@
   when: volume_dirs is defined and volume_dirs | length > 0
 
 - name: Copy docker-compose file to deployment directory
-  copy:
+  template:
     src: "{{ compose_src }}"
     dest: "/srv/{{ deployment_name }}/docker-compose.yml"
     mode: '0644'
   notify: compose up
 
+- name: Flush handlers
+  meta: flush_handlers
+  when: docker_compose_immediate_up

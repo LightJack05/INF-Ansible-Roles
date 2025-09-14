@@ -1,0 +1,6 @@
+docker_network_name: ""
+docker_network_driver: "macvlan"
+docker_network_parent: "eth0"
+docker_network_gateway: ""
+docker_network_subnet: ""
+docker_network_iprange: ""
