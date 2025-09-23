@@ -23,7 +23,7 @@
 - name: Ensure server plugin directory exists
   become: true
   file:
-    path: "{{ minecraft_server_dir }}/plugins"
+    path: "{{ paper_minecraft_server_dir }}/plugins"
     state: directory
     mode: '0755'
     owner: root
@@ -32,7 +32,7 @@
 - name: Ensure server mod directory exists
   become: true
   file:
-    path: "{{ minecraft_server_dir }}/mods"
+    path: "{{ paper_minecraft_server_dir }}/mods"
     state: directory
     mode: '0755'
     owner: root
@@ -41,7 +41,7 @@
 - name: Download mods to server
   get_url:
     url: "{{ item }}"
-    dest: "{{ minecraft_server_dir }}/mods"
+    dest: "{{ paper_minecraft_server_dir }}/mods"
     mode: '0644'
     owner: root
     group: root
@@ -51,7 +51,7 @@
 - name: Copy mods to server
   template:
     src: "{{ item }}"
-    dest: "{{ minecraft_server_dir }}/mods"
+    dest: "{{ paper_minecraft_server_dir }}/mods"
     mode: '0644'
   loop: "{{ paper_mod_files }}"
   notify: restart minecraft
@@ -59,7 +59,7 @@
 - name: Download plugins to server
   get_url:
     url: "{{ item }}"
-    dest: "{{ minecraft_server_dir }}/plugins"
+    dest: "{{ paper_minecraft_server_dir }}/plugins"
     mode: '0644'
     owner: root
     group: root
@@ -69,7 +69,7 @@
 - name: Copy plugins to server
   template:
     src: "{{ item }}"
-    dest: "{{ minecraft_server_dir }}/plugins"
+    dest: "{{ paper_minecraft_server_dir }}/plugins"
     mode: '0644'
   loop: "{{ paper_plugin_files }}"
   notify: restart minecraft
