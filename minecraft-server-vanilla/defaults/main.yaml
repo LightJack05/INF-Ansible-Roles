@@ -6,4 +6,6 @@ minecraft_auto_start: true
 minecraft_memory_max: "4G"
 minecraft_memory_min: "1G"
 minecraft_session_name: "minecraft"
+minecraft_skip_checksum_verify: false
 java_package: "openjdk-21-jre-headless"
+

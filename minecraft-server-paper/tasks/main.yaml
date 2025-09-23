@@ -15,6 +15,7 @@
     minecraft_memory_min: "{{ paper_minecraft_memory_min }}"
     minecraft_server_dir: "{{ paper_minecraft_server_dir }}"
     minecraft_server_auto_start: false
+    minecraft_skip_checksum_verify: false
     paper_minecraft_session_name: "{{ minecraft_session_name }}"
     java_package: "{{ paper_java_package }}"
 

@@ -53,7 +53,7 @@
   when: server_jar_stat.stat.exists
   changed_when: false
 
-- name: Download Minecraft server JAR
+- name: Download Minecraft server JAR (Verify Checksum)
   become: true
   get_url:
     url: "{{ minecraft_server_url_resolved }}"
@@ -61,8 +61,19 @@
     mode: '0644'
     owner: root
     group: root
-    checksum: "sha1:{{ version_json.json.downloads.server.sha1 if minecraft_server_url == '' else omit }}"
-  when: not server_jar_stat.stat.exists or (minecraft_server_url == '' and existing_jar_checksum.stdout.split()[0] != version_json.json.downloads.server.sha1) or (minecraft_server_url != '' and existing_jar_checksum.stdout.split()[0] != (lookup('url', minecraft_server_url, wantlist=True) | hash('sha1')))
+    checksum: "sha1:{{ version_json.json.downloads.server.sha1 if minecraft_server_url == ''  else omit }}"
+  when: not server_jar_stat.stat.exists or (minecraft_server_url == '' and existing_jar_checksum.stdout.split()[0] != version_json.json.downloads.server.sha1) or (minecraft_server_url != '' and existing_jar_checksum.stdout.split()[0] != (lookup('url', minecraft_server_url, wantlist=True) | hash('sha1'))) or minecraft_skip_checksum_verify
+  notify: restart minecraft
+
+- name: Download Minecraft server JAR (Ignore Checksum)
+  become: true
+  get_url:
+    url: "{{ minecraft_server_url_resolved }}"
+    dest: "{{ minecraft_server_dir }}/server.jar"
+    mode: '0644'
+    owner: root
+    group: root
+  when: not (not server_jar_stat.stat.exists or (minecraft_server_url == '' and existing_jar_checksum.stdout.split()[0] != version_json.json.downloads.server.sha1) or (minecraft_server_url != '' and existing_jar_checksum.stdout.split()[0] != (lookup('url', minecraft_server_url, wantlist=True) | hash('sha1'))) or minecraft_skip_checksum_verify)
   notify: restart minecraft
 
 - name: Create run.sh script
