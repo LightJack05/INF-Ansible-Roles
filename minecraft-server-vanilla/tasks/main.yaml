@@ -58,6 +58,7 @@
   get_url:
     url: "{{ minecraft_server_url_resolved }}"
     dest: "{{ minecraft_server_dir }}/server.jar"
+    force: true
     mode: '0644'
     owner: root
     group: root
@@ -70,6 +71,7 @@
   get_url:
     url: "{{ minecraft_server_url_resolved }}"
     dest: "{{ minecraft_server_dir }}/server.jar"
+    force: true
     mode: '0644'
     owner: root
     group: root
