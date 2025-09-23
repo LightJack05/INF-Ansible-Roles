@@ -10,7 +10,7 @@
   ansible.builtin.include_role:
     name: minecraft-server-vanilla
   vars:
-    minecraft_server_url: "{{ paper_minecraft_server_url }}"
+    minecraft_server_url: "{{ paper_server_url }}"
     minecraft_memory_max: "{{ paper_minecraft_memory_max }}"
     minecraft_memory_min: "{{ paper_minecraft_memory_min }}"
     minecraft_server_dir: "{{ paper_minecraft_server_dir }}"
