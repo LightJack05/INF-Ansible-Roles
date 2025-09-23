@@ -1,0 +1,76 @@
+- name: Verify configuration
+  fail:
+    msg: "Required variable {{ item }} is undefined or an empty string!"
+  when: vars[item] is undefined or vars[item] is ""
+  loop:
+    - paper_server_url
+    - paper_java_package
+
+- name: Install docker compose
+  ansible.builtin.include_role:
+    name: minecraft-server-vanilla
+  vars:
+    minecraft_server_url: "{{ paper_minecraft_server_url }}"
+    minecraft_memory_max: "{{ paper_minecraft_memory_max }}"
+    minecraft_memory_min: "{{ paper_minecraft_memory_min }}"
+    minecraft_server_dir: "{{ paper_minecraft_server_dir }}"
+    minecraft_server_auto_start: false
+    paper_minecraft_session_name: "{{ minecraft_session_name }}"
+    java_package: "{{ paper_java_package }}"
+  notify: restart minecraft
+
+
+- name: Ensure server plugin directory exists
+  become: true
+  file:
+    path: "{{ minecraft_server_dir }}/plugins"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Ensure server mod directory exists
+  become: true
+  file:
+    path: "{{ minecraft_server_dir }}/mods"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Download mods to server
+  get_url:
+    url: "{{ item }}"
+    dest: "{{ minecraft_server_dir }}/mods"
+    mode: '0644'
+    owner: root
+    group: root
+  loop: "{{ paper_mod_urls }}"
+  notify: restart minecraft
+
+- name: Copy mods to server
+  template:
+    src: "{{ item }}"
+    dest: "{{ minecraft_server_dir }}/mods"
+    mode: '0644'
+  loop: "{{ paper_mod_files }}"
+  notify: restart minecraft
+
+- name: Download plugins to server
+  get_url:
+    url: "{{ item }}"
+    dest: "{{ minecraft_server_dir }}/plugins"
+    mode: '0644'
+    owner: root
+    group: root
+  loop: "{{ paper_plugin_urls }}"
+  notify: restart minecraft
+
+- name: Copy plugins to server
+  template:
+    src: "{{ item }}"
+    dest: "{{ minecraft_server_dir }}/plugins"
+    mode: '0644'
+  loop: "{{ paper_plugin_files }}"
+  notify: restart minecraft
+

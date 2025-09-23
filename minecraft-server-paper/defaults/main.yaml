@@ -1,0 +1,12 @@
+---
+paper_server_url: ""
+paper_mod_urls: []
+paper_mod_files: []
+paper_plugin_urls: []
+paper_plugin_files: []
+paper_minecraft_version: ""
+paper_minecraft_server_dir: "/srv/minecraft"
+paper_minecraft_memory_max: "4G"
+paper_minecraft_memory_min: "1G"
+paper_minecraft_session_name: "minecraft"
+paper_java_package: "openjdk-21-jre-headless"
