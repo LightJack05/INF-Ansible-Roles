@@ -17,7 +17,6 @@
     minecraft_server_auto_start: false
     paper_minecraft_session_name: "{{ minecraft_session_name }}"
     java_package: "{{ paper_java_package }}"
-  notify: restart minecraft
 
 
 - name: Ensure server plugin directory exists
