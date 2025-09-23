@@ -49,7 +49,7 @@
   notify: restart minecraft
 
 - name: Copy mods to server
-  template:
+  copy:
     src: "{{ item }}"
     dest: "{{ paper_minecraft_server_dir }}/mods"
     mode: '0644'
@@ -67,7 +67,7 @@
   notify: restart minecraft
 
 - name: Copy plugins to server
-  template:
+  copy:
     src: "{{ item }}"
     dest: "{{ paper_minecraft_server_dir }}/plugins"
     mode: '0644'
