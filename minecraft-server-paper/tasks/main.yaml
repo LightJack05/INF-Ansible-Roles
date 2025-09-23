@@ -1,7 +1,7 @@
 - name: Verify configuration
   fail:
     msg: "Required variable {{ item }} is undefined or an empty string!"
-  when: vars[item] is undefined or vars[item] is ""
+  when: vars[item] is undefined or vars[item] == ''
   loop:
     - paper_server_url
     - paper_java_package
