@@ -73,7 +73,7 @@
     mode: '0644'
     owner: root
     group: root
-  when: not ((not server_jar_stat.stat.exists or (minecraft_server_url == '' and existing_jar_checksum.stdout.split()[0] != version_json.json.downloads.server.sha1) or (minecraft_server_url != '' and existing_jar_checksum.stdout.split()[0] != (lookup('url', minecraft_server_url, wantlist=True) | hash('sha1')))) and minecraft_skip_checksum_verify)
+  when: not minecraft_skip_checksum_verify
   notify: restart minecraft
 
 - name: Create run.sh script
