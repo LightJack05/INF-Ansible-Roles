@@ -1,3 +1,7 @@
+- name: Install docker compose
+  ansible.builtin.include_role:
+    name: docker-compose-install
+
 - name: Create Docker macvlan network
   community.docker.docker_network:
     name: "{{ docker_network_name }}"
